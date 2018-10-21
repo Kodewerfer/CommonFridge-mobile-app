@@ -22,24 +22,24 @@ export class CameraScreen extends React.Component {
 
     let that = this
 
-    this.camera.takePictureAsync({
-      onPictureSaved: (photo) => {
-
+    this.camera.takePictureAsync({ quality: 0.3, skipProcessing: true, base64: true }).then(
+      (photo) => {
+        this.props.afterTakingPhoto(photo);
+        this.props.toggleCamera();
+      },
+      () => {
         that.setState({
           isAbleToSnap: true
         })
+      });
 
-        this.props.afterTakingPhoto(photo);
-        this.props.toggleCamera();
-
-      }
-
-    });
 
     this.setState({
       isAbleToSnap: false
     })
   }
+
+
 
   onFlipCamera() {
     this.setState({
@@ -80,7 +80,7 @@ export class CameraScreen extends React.Component {
                 onPress={() => this.takeSnap()}
                 activeOpacity={snapBtnOpacity}
               >
-                <Text style={[Styles.alertText, isAlertShows]}>Processing...</Text>
+                <Text style={[Styles.alertText, isAlertShows]}>Please Hold...</Text>
                 <View style={snapBG}>
                   <Icon name="camera" style={Styles.snapIcon} size={40} color="#fff" />
                 </View>
@@ -149,7 +149,7 @@ const Styles = StyleSheet.create({
     color: '#fff',
     backgroundColor: '#4F2D7F',
     padding: 20,
-    fontSize: 20,
+    fontSize: 15,
     marginBottom: 15,
     alignSelf: 'center'
   }
