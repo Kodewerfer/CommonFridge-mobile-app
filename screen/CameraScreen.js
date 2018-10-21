@@ -72,7 +72,14 @@ export class CameraScreen extends React.Component {
             <View
               style={Styles.actionBar}>
 
-              <TouchableOpacity style={Styles.flipBtn}>
+              <TouchableOpacity
+                style={Styles.flipBtn}
+                onPress={() => this.props.toggleCamera()}
+              >
+                <Text
+                  style={Styles.flipBtnText}>
+                  Cancel
+                </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
