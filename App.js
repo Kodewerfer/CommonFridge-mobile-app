@@ -4,6 +4,7 @@ import { AppLoading, Asset, Font, Icon } from 'expo';
 import { WelcomeScreen } from './screen/WelcomeScreen';
 import { CameraScreen } from './screen/CameraScreen';
 import { HomeScreen } from './screen/HomeScreen';
+import { PhotoViewer } from './stateless/PhotoViewer';
 
 
 export default class App extends React.Component {
@@ -12,9 +13,10 @@ export default class App extends React.Component {
 
     this.state = {
       isLoadingComplete: false,
-      username: null,
+      username: 'test test',
       isTakingPhoto: false,
       itemPhoto: null,
+      isViewingPhoto: false,
       itemDesc: null
     };
 
@@ -32,9 +34,18 @@ export default class App extends React.Component {
     })
   }
 
+  togglePhotoView() {
+    this.setState({
+      isViewingPhoto: !this.state.isViewingPhoto
+    })
+  }
+
   handlePhoto(photo) {
     console.log('app has received:');
     console.log(photo)
+    this.setState({
+      itemPhoto: photo
+    })
   }
 
   render() {
@@ -58,16 +69,23 @@ export default class App extends React.Component {
       );
     }
 
-    // When taking a photo
+    // When taking a photo.
     if (state.isTakingPhoto) {
       return (
         <CameraScreen toggleCamera={() => this.toggleCamera()} afterTakingPhoto={(photo) => this.handlePhoto(photo)} />
       );
     }
 
+    // When tap on the photo to view.
+    if (state.isViewingPhoto) {
+      return (
+        <PhotoViewer itemPhoto={this.state.itemPhoto} togglePhotoView={() => this.togglePhotoView()} ></PhotoViewer>
+      );
+    }
+
     // render HomeScreen By default
     return (
-      <HomeScreen itemPhoto={this.state.itemPhoto} username={this.state.username} toggleCamera={() => this.toggleCamera()} />
+      <HomeScreen togglePhotoView={() => this.togglePhotoView()} itemPhoto={this.state.itemPhoto} username={this.state.username} toggleCamera={() => this.toggleCamera()} />
     )
   }
 
