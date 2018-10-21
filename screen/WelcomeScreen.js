@@ -23,7 +23,7 @@ export class WelcomeScreen extends Component {
     })
   }
   onSubmit() {
-    // debugger;
+    this.props.whenSubmit(this.state.username)
   }
   render() {
 
