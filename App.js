@@ -7,18 +7,34 @@ import { HomeScreen } from './screen/HomeScreen';
 
 
 export default class App extends React.Component {
-  state = {
-    isLoadingComplete: false,
-    username: null,
-    isTakingPhoto: false,
-    thePhoto: null,
-    description: null
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isLoadingComplete: false,
+      username: null,
+      isTakingPhoto: false,
+      itemPhoto: null,
+      itemDesc: null
+    };
+
+  }
 
   handleUsername(username) {
     this.setState({
       username: username
     })
+  }
+
+  toggleCamera() {
+    this.setState({
+      isTakingPhoto: !this.state.isTakingPhoto
+    })
+  }
+
+  handlePhoto(photo) {
+    console.log('app has received:');
+    console.log(photo)
   }
 
   render() {
@@ -42,15 +58,16 @@ export default class App extends React.Component {
       );
     }
 
-    // when taking a photo
+    // When taking a photo
     if (state.isTakingPhoto) {
       return (
-        <CameraScreen />
+        <CameraScreen toggleCamera={() => this.toggleCamera()} afterTakingPhoto={(photo) => this.handlePhoto(photo)} />
       );
     }
 
+    // render HomeScreen By default
     return (
-      <HomeScreen username={this.state.username} />
+      <HomeScreen itemPhoto={this.state.itemPhoto} username={this.state.username} toggleCamera={() => this.toggleCamera()} />
     )
   }
 
