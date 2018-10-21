@@ -3,15 +3,28 @@ import { StyleSheet } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import { WelcomeScreen } from './screen/WelcomeScreen';
 import { CameraScreen } from './screen/CameraScreen';
+import { HomeScreen } from './screen/HomeScreen';
 
 
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
+    username: null,
+    isTakingPhoto: false,
+    thePhoto: null,
+    description: null
   };
 
+  handleUsername(username) {
+    this.setState({
+      username: username
+    })
+  }
+
   render() {
+
     // loading resouces process, unused for now.
+    const state = this.state;
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
@@ -20,11 +33,25 @@ export default class App extends React.Component {
           onFinish={this._handleFinishLoading}
         />
       );
-    } else {
+    }
+
+    // no username yet, render the welcome screen.
+    if (!state.username) {
       return (
-        <WelcomeScreen></WelcomeScreen>
+        <WelcomeScreen whenSubmit={(username) => { this.handleUsername(username) }} />
       );
     }
+
+    // when taking a photo
+    if (state.isTakingPhoto) {
+      return (
+        <CameraScreen />
+      );
+    }
+
+    return (
+      <HomeScreen username={this.state.username} />
+    )
   }
 
 
