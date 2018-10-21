@@ -24,11 +24,14 @@ export class CameraScreen extends React.Component {
 
     this.camera.takePictureAsync({
       onPictureSaved: (photo) => {
-        console.log(photo)
 
         that.setState({
           isAbleToSnap: true
         })
+
+        this.props.afterTakingPhoto(photo);
+        this.props.toggleCamera();
+
       }
 
     });
@@ -50,7 +53,7 @@ export class CameraScreen extends React.Component {
 
     const { hasCameraPermission } = this.state;
 
-    const ableToSnap = this.state.isAbleToSnap;    
+    const ableToSnap = this.state.isAbleToSnap;
 
     const snapBG = ableToSnap ? Styles.snapBtnBG : Styles.snapBtnBGDis;
     const isAlertShows = ableToSnap ? { display: 'none' } : '';
