@@ -1,0 +1,41 @@
+Arguments: 
+  I:\Program files\node\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add font-awesome --save
+
+PATH: 
+  C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\iCLS\;C:\Program Files\Intel\Intel(R) Management Engine Components\iCLS\;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft VS Code\bin;I:\Program files\node\;C:\ProgramData\chocolatey\bin;C:\Program Files (x86)\Yarn\bin\;C:\Users\lijle\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Microsoft VS Code\bin;C:\Users\lijle\AppData\Roaming\npm;C:\Users\lijle\AppData\Local\Yarn\bin
+
+Yarn version: 
+  1.10.1
+
+Node version: 
+  8.12.0
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: EPERM: operation not permitted, unlink 'I:\Mobiles\common-fridge\node_modules\deep-extend\lib'
+
+npm manifest: 
+  {
+    "name": "empty-project-template",
+    "main": "node_modules/expo/AppEntry.js",
+    "private": true,
+    "scripts": {
+      "start": "expo start",
+      "android": "expo start --android",
+      "ios": "expo start --ios",
+      "eject": "expo eject"
+    },
+    "dependencies": {
+      "expo": "^30.0.1",
+      "react": "16.3.1",
+      "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
