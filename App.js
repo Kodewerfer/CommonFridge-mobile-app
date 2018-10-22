@@ -65,27 +65,40 @@ export default class App extends React.Component {
     // no username yet, render the welcome screen.
     if (!state.username) {
       return (
-        <WelcomeScreen whenSubmit={(username) => { this.handleUsername(username) }} />
+        <WelcomeScreen
+          whenSubmit={(username) => { this.handleUsername(username) }}
+        />
       );
     }
 
     // When taking a photo.
     if (state.isTakingPhoto) {
       return (
-        <CameraScreen toggleCamera={() => this.toggleCamera()} afterTakingPhoto={(photo) => this.handlePhoto(photo)} />
+        <CameraScreen
+          toggleCamera={() => this.toggleCamera()}
+          afterTakingPhoto={(photo) => this.handlePhoto(photo)}
+        />
       );
     }
 
     // When tap on the photo to view.
     if (state.isViewingPhoto) {
       return (
-        <PhotoViewer itemPhoto={this.state.itemPhoto} togglePhotoView={() => this.togglePhotoView()} ></PhotoViewer>
+        <PhotoViewer
+          itemPhoto={this.state.itemPhoto}
+          togglePhotoView={() => this.togglePhotoView()}
+        />
       );
     }
 
     // render HomeScreen By default
     return (
-      <HomeScreen togglePhotoView={() => this.togglePhotoView()} itemPhoto={this.state.itemPhoto} username={this.state.username} toggleCamera={() => this.toggleCamera()} />
+      <HomeScreen
+        togglePhotoView={() => this.togglePhotoView()}
+        itemPhoto={this.state.itemPhoto}
+        username={this.state.username}
+        toggleCamera={() => this.toggleCamera()}
+      />
     )
   }
 
