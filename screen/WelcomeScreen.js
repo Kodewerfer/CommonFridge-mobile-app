@@ -7,7 +7,7 @@ export class WelcomeScreen extends Component {
 
     this.state = {
       showNameInput: false,
-      username: null,
+      username: '',
       isNameEmpty: true
     }
 
@@ -23,6 +23,10 @@ export class WelcomeScreen extends Component {
     })
   }
   onSubmit() {
+    if (this.state.username === '') {
+      alert('Please give us a user name.')
+      return;
+    }
     this.props.whenSubmit(this.state.username)
   }
   render() {
@@ -31,33 +35,34 @@ export class WelcomeScreen extends Component {
     const secondLine = "Welcome!";
     const inputTop = "You shall be known as";
 
-    const inputStyle = this.state.showNameInput ? styles.textInput : styles.invis;
+    const inputStyle = this.state.showNameInput ? Styles.textInput : Styles.invis;
 
     return (
 
-      <View style={styles.container}>
+      <View style={Styles.container}>
 
-        <View style={styles.welcomeTexts}>
-          <Text style={styles.text}>{titleText}</Text>
-          <Text style={[styles.text, { fontSize: 30 }, { padding: 30 }]}>{secondLine}</Text>
+        <View style={Styles.welcomeTexts}>
+          <Text style={Styles.text}>{titleText}</Text>
+          <Text style={[Styles.text, { fontSize: 30 }, { padding: 30 }]}>{secondLine}</Text>
         </View>
 
         <KeyboardAvoidingView behavior="padding" enabled style={inputStyle}>
 
-          <Text style={[styles.text, { fontFamily: 'space-mono' }]}>{inputTop}</Text>
+          <Text style={[Styles.text, { fontFamily: 'space-mono' }]}>{inputTop}</Text>
 
           <TextInput
-            style={styles.textbox}
+            style={Styles.textbox}
             textContentType={'givenName'}
             onChangeText={(text) => this.handleInput(text)}
             onSubmitEditing={() => this.onSubmit()}
           />
 
           <TouchableOpacity onPress={() => this.onSubmit()}>
-            <View style={styles.submitBtn}>
+            <View style={Styles.submitBtn}>
               <Text style={{ color: '#fff', fontSize: 15 }}>Submit</Text>
             </View>
           </TouchableOpacity>
+
         </KeyboardAvoidingView>
       </View>
 
@@ -65,7 +70,7 @@ export class WelcomeScreen extends Component {
   }
 }
 
-const styles = StyleSheet.create({
+const Styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#4F2D7F',
