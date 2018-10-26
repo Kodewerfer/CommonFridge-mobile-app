@@ -1,27 +1,98 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, KeyboardAvoidingView, TextInput, TouchableOpacity } from 'react-native';
+import {
+  Dimensions,
+  Keyboard,
+  Animated,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity
+} from 'react-native';
 
 export class WelcomeScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      showNameInput: false,
+      showTextInput: false,
       username: '',
       isNameEmpty: true
     }
 
+    this.welcomeTextOpacity = new Animated.Value(1);
+    this.textInputOpactiy = new Animated.Value(0);
+
+    this.keyboardHeight = new Animated.Value(0);
+
+    // this.welcomeTextHeight = new Animated.Value(this.getDimensions().topHeight);
+    this.welcomeTextHeight = new Animated.Value(this.getDimensions().windowHeight);
+    // this.textInputHeight = new Animated.Value(this.getDimensions().btmHeight);
+    this.textInputHeight = new Animated.Value(0);
+
+  }
+
+  // Animation preparing
+  componentDidMount() {
+    this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this._keyboardWillShow);
+    this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this._keyboardWillHide);
+
     setTimeout(() => {
       this.setState({
-        showNameInput: true
+        showTextInput: true,
       })
-    }, 2500);
+    }, 1500);
+
   }
+
+  // getSnapshotBeforeUpdate(prevProps, prevState) {
+  //   if (prevState.showTextInput === false) {
+  //     this.playAnimation = true
+  //   } else {
+  //     this.playAnimation = false
+  //   }
+
+  // }
+
+  componentDidUpdate(prevProps, prevState) {
+
+    if (prevState.showTextInput === true) {
+      return;
+    }
+
+    const duration = 700;
+
+    Animated.sequence([
+
+      // change height
+      Animated.parallel([
+        Animated.timing(this.welcomeTextHeight, {
+          duration: duration,
+          toValue: this.getDimensions().topHeight,
+        }),
+        Animated.timing(this.textInputHeight, {
+          duration: duration,
+          toValue: this.getDimensions().btmHeight,
+        }),
+      ]),
+
+      // show the input
+      Animated.timing(this.textInputOpactiy, {
+        duration: duration,
+        toValue: 1,
+      })
+    ]).start();
+
+
+
+  }
+
   handleInput(text) {
     this.setState({
       username: text
     })
   }
+
   onSubmit() {
     if (this.state.username === '') {
       alert('Please give us a user name.')
@@ -29,24 +100,25 @@ export class WelcomeScreen extends Component {
     }
     this.props.whenSubmit(this.state.username)
   }
+
   render() {
 
     const titleText = "Bishop’s Community Fridge";
     const secondLine = "Welcome!";
     const inputTop = "You shall be known as";
 
-    const inputStyle = this.state.showNameInput ? Styles.textInput : Styles.invis;
+
 
     return (
 
-      <View style={Styles.container}>
+      <Animated.View style={[Styles.container, { paddingBottom: this.keyboardHeight }]}>
 
-        <View style={Styles.welcomeTexts}>
+        <Animated.View style={[Styles.welcomeTexts, { height: this.welcomeTextHeight }, { opacity: this.welcomeTextOpacity }]}>
           <Text style={Styles.text}>{titleText}</Text>
           <Text style={[Styles.text, { fontSize: 30 }, { padding: 30 }]}>{secondLine}</Text>
-        </View>
+        </Animated.View>
 
-        <KeyboardAvoidingView behavior="padding" enabled style={inputStyle}>
+        <Animated.View style={[Styles.textInput, { height: this.textInputHeight }, { opacity: this.textInputOpactiy }]}>
 
           <Text style={[Styles.text, { fontFamily: 'space-mono' }]}>{inputTop}</Text>
 
@@ -54,19 +126,68 @@ export class WelcomeScreen extends Component {
             style={Styles.textbox}
             textContentType={'givenName'}
             onChangeText={(text) => this.handleInput(text)}
-            onSubmitEditing={() => this.onSubmit()}
           />
 
           <TouchableOpacity onPress={() => this.onSubmit()}>
             <View style={Styles.submitBtn}>
-              <Text style={{ color: '#fff', fontSize: 15 }}>Submit</Text>
+              <Text style={{ color: '#fff', fontSize: 20 }}>Submit</Text>
             </View>
           </TouchableOpacity>
 
-        </KeyboardAvoidingView>
-      </View>
+        </Animated.View>
+      </Animated.View>
 
     );
+  }
+
+  _keyboardWillShow = (event) => {
+
+    Animated.parallel([
+      Animated.timing(this.keyboardHeight, {
+        duration: event.duration,
+        toValue: event.endCoordinates.height + 50,
+      }),
+      Animated.timing(this.welcomeTextOpacity, {
+        duration: event.duration,
+        toValue: 0,
+      }),
+      Animated.timing(this.welcomeTextHeight, {
+        duration: event.duration,
+        toValue: this.getDimensions().windowHeight / 4,
+      }),
+
+    ]).start();
+  }
+
+  _keyboardWillHide = (event) => {
+
+    Animated.parallel([
+      Animated.timing(this.keyboardHeight, {
+        duration: event.duration,
+        toValue: 0,
+      }),
+      Animated.timing(this.welcomeTextOpacity, {
+        duration: event.duration,
+        toValue: 1,
+      }),
+      Animated.timing(this.welcomeTextHeight, {
+        duration: event.duration,
+        toValue: this.getDimensions().topHeight,
+      }),
+
+    ]).start();
+
+  }
+
+  getDimensions = () => {
+    const windowHeight = Dimensions.get('window').height;
+    const topHeight = windowHeight / 1.8;
+
+    return {
+      windowHeight: windowHeight,
+      topHeight: topHeight,
+      btmHeight: windowHeight - topHeight
+    }
   }
 }
 
@@ -79,12 +200,10 @@ const Styles = StyleSheet.create({
 
   },
   welcomeTexts: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
   textInput: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
