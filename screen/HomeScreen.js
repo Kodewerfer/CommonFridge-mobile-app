@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {
   Dimensions,
+  Keyboard,  
   Animated,
   StyleSheet,
   Text,
   Image,
   View,
-  Keyboard,
   TextInput,
   TouchableOpacity
 } from 'react-native';
@@ -23,9 +23,10 @@ export class HomeScreen extends Component {
     }
   }
 
+  // Animation preparing
   componentDidMount() {
-    this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this._keyboardDidShow);
-    this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this._keyboardDidHide);
+    this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this._keyboardWillShow);
+    this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this._keyboardWillHide);
 
   }
 
@@ -157,7 +158,7 @@ export class HomeScreen extends Component {
     );
   }
 
-  _keyboardDidShow = (event) => {
+  _keyboardWillShow = (event) => {
 
     Animated.parallel([
       Animated.timing(this.keyboardHeight, {
@@ -176,7 +177,7 @@ export class HomeScreen extends Component {
 
   }
 
-  _keyboardDidHide = (event) => {
+  _keyboardWillHide = (event) => {
     Animated.parallel([
       Animated.timing(this.keyboardHeight, {
         duration: event.duration,
