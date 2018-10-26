@@ -1,13 +1,25 @@
 import React, { Component } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Dimensions, Animated, StyleSheet, Text, Image, View, Keyboard, KeyboardAvoidingView, TextInput, TouchableOpacity } from 'react-native';
+import {
+  Dimensions,
+  Animated,
+  StyleSheet,
+  Text,
+  Image,
+  View,
+  Keyboard,
+  TextInput,
+  TouchableOpacity
+} from 'react-native';
 
 export class HomeScreen extends Component {
+
   constructor(props) {
     super(props);
 
     this.state = {
       isKeyboardUp: false,
+      itemDesc: ''
     }
   }
 
@@ -70,14 +82,37 @@ export class HomeScreen extends Component {
 
   }
 
+  onChangeText(text) {
+    this.setState({
+      itemDesc: text
+    })
+  }
+
+  onSubmiting() {
+
+    if (!this.props.itemPhoto) {
+      alert('Please take a photo of the item');
+      return;
+    }
+
+    if (this.state.itemDesc === '' || !this.state.itemDesc) {
+      alert('Please enter a item description.')
+      return;
+    }
+
+    this.props.setDesc(this.state.itemDesc);
+    this.props.allDone();
+
+  }
+
   render() {
 
-    const inputTop = 'Item description'
+    const inputTop = "It's / They're ..."
 
     this.topWrapperOpacity = new Animated.Value(1);
     this.keyboardHeight = new Animated.Value(0);
-    this.topWrapperHeight = new Animated.Value(this.getDimensions().topWH);
-    this.bottomWrapperHeight = new Animated.Value(this.getDimensions().btmWH);
+    this.topWrapperHeight = new Animated.Value(this.getDimensions().topHeight);
+    this.bottomWrapperHeight = new Animated.Value(this.getDimensions().btmHeight);
 
     return (
       <View style={Styles.container}>
@@ -87,8 +122,8 @@ export class HomeScreen extends Component {
 
             <View style={Styles.containerTop}>
 
-              <Text style={[Styles.text, { fontSize: 30 }]}>Welcome!</Text>
-              <Text style={[Styles.text, { fontSize: 30 }]}>{this.props.username}</Text>
+              <Text style={[Styles.text, Styles.welcomeText, { fontSize: 30 }]}>Welcome!</Text>
+              <Text style={[Styles.text, Styles.welcomeText, { fontSize: 35 }, { fontFamily: 'space-mono' }]}>{this.props.username}</Text>
 
             </View>
 
@@ -101,17 +136,16 @@ export class HomeScreen extends Component {
           <Animated.View style={[Styles.bottomWrapper, { height: this.bottomWrapperHeight }]}>
 
             <View style={Styles.containerBtm}>
-              <Text style={Styles.text}>{inputTop}</Text>
+              <Text style={[Styles.text, { fontSize: 15 }]}>{inputTop}</Text>
               <TextInput
                 style={Styles.textbox}
                 textContentType={'givenName'}
-                onChangeText={(text) => { }}
-                onSubmitEditing={() => { }}
+                onChangeText={(text) => this.onChangeText(text)}
               />
 
-              <TouchableOpacity onPress={() => this.onSubmit()}>
+              <TouchableOpacity onPress={() => this.onSubmiting()}>
                 <View style={Styles.submitBtn}>
-                  <Text style={{ color: '#fff', fontSize: 15 }}>Submit</Text>
+                  <Text style={{ color: '#fff', fontSize: 20 }}>Done</Text>
                 </View>
               </TouchableOpacity>
 
@@ -154,7 +188,7 @@ export class HomeScreen extends Component {
       }),
       Animated.timing(this.topWrapperHeight, {
         duration: event.duration,
-        toValue: this.getDimensions().topWH,
+        toValue: this.getDimensions().topHeight,
       }),
 
     ]).start();
@@ -162,25 +196,23 @@ export class HomeScreen extends Component {
 
   getDimensions() {
     const windowHeight = Dimensions.get('window').height;
-    const topWH = windowHeight / 1.6;
+    const topHeight = windowHeight / 1.6;
 
     return {
       windowHeight: windowHeight,
-      topWH: topWH,
-      btmWH: windowHeight - topWH
+      topHeight: topHeight,
+      btmHeight: windowHeight - topHeight
     }
   }
-
-
 }
 
 const Styles = StyleSheet.create({
   text: {
     alignSelf: 'center',
     color: '#616161',
-    fontSize: 22,
-
-
+  },
+  welcomeText: {
+    color: '#fff',
   },
   tipsText: {
     alignSelf: 'center',
@@ -197,9 +229,8 @@ const Styles = StyleSheet.create({
   },
   containerInner: {
     flex: 1,
-    borderRadius: 20,
-    // height: '100%',
-    backgroundColor: '#F8ECC2',
+    borderRadius: 25,
+    backgroundColor: '#ededed',
   },
   topWrapper: {
     height: "65%",
@@ -217,7 +248,7 @@ const Styles = StyleSheet.create({
     padding: 50,
     paddingHorizontal: 60,
     borderRadius: 10,
-    borderColor: "#ccc",
+    borderColor: "#7f7f7f",
     borderStyle: "dashed",
     borderWidth: 2
   },
@@ -243,9 +274,11 @@ const Styles = StyleSheet.create({
   },
   containerTop: {
     flex: 0.6,
-    // height:'20%',
+    borderTopStartRadius: 25,
+    borderTopEndRadius: 25,
     alignItems: 'center',
     justifyContent: 'flex-end',
+    backgroundColor: "#7650aa"
   },
   containerMid: {
     flex: 1.5,
