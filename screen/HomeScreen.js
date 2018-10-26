@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {
   Dimensions,
-  Keyboard,  
+  Keyboard,
   Animated,
   StyleSheet,
   Text,
@@ -21,6 +21,12 @@ export class HomeScreen extends Component {
       isKeyboardUp: false,
       itemDesc: ''
     }
+
+    this.topWrapperOpacity = new Animated.Value(1);
+    this.keyboardHeight = new Animated.Value(0);
+
+    this.topWrapperHeight = new Animated.Value(this.getDimensions().topHeight);
+    this.bottomWrapperHeight = new Animated.Value(this.getDimensions().btmHeight);
   }
 
   // Animation preparing
@@ -110,10 +116,6 @@ export class HomeScreen extends Component {
 
     const inputTop = "It's / They're ..."
 
-    this.topWrapperOpacity = new Animated.Value(1);
-    this.keyboardHeight = new Animated.Value(0);
-    this.topWrapperHeight = new Animated.Value(this.getDimensions().topHeight);
-    this.bottomWrapperHeight = new Animated.Value(this.getDimensions().btmHeight);
 
     return (
       <View style={Styles.container}>
@@ -173,11 +175,13 @@ export class HomeScreen extends Component {
         duration: event.duration,
         toValue: this.getDimensions().windowHeight / 4,
       }),
+
     ]).start();
 
   }
 
   _keyboardWillHide = (event) => {
+
     Animated.parallel([
       Animated.timing(this.keyboardHeight, {
         duration: event.duration,
@@ -193,9 +197,10 @@ export class HomeScreen extends Component {
       }),
 
     ]).start();
+
   }
 
-  getDimensions() {
+  getDimensions = () => {
     const windowHeight = Dimensions.get('window').height;
     const topHeight = windowHeight / 1.6;
 
@@ -254,6 +259,9 @@ const Styles = StyleSheet.create({
     borderWidth: 2
   },
   textbox: {
+    borderColor: "#7f7f7f",
+    borderWidth: 2,
+    borderStyle: "dotted",
     fontFamily: 'space-mono',
     textAlign: "center",
     width: 300,
@@ -283,13 +291,11 @@ const Styles = StyleSheet.create({
   },
   containerMid: {
     flex: 1.5,
-    // height:'60%',
     alignItems: 'center',
     justifyContent: 'center',
   },
   containerBtm: {
     flex: 1,
-    // height:'20%',
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
