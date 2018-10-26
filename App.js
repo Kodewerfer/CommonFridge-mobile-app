@@ -13,7 +13,7 @@ export default class App extends React.Component {
 
     this.state = {
       isLoadingComplete: false,
-      username: 'test test',
+      username: '',
       isTakingPhoto: false,
       itemPhoto: null,
       isViewingPhoto: false,
@@ -22,7 +22,7 @@ export default class App extends React.Component {
 
   }
 
-  handleUsername(username) {
+  receiveUsername(username) {
     this.setState({
       username: username
     })
@@ -40,12 +40,20 @@ export default class App extends React.Component {
     })
   }
 
-  handlePhoto(photo) {
-    console.log('app has received:');
-    console.log(photo)
+  receivePhoto(photo) {
     this.setState({
       itemPhoto: photo
     })
+  }
+
+  receiveDesc(text) {
+    this.setState({
+      itemDesc: text
+    })
+  }
+
+  sendData() {
+    console.log(this.state)
   }
 
   render() {
@@ -66,7 +74,7 @@ export default class App extends React.Component {
     if (!state.username) {
       return (
         <WelcomeScreen
-          whenSubmit={(username) => { this.handleUsername(username) }}
+          whenSubmit={(username) => { this.receiveUsername(username) }}
         />
       );
     }
@@ -76,7 +84,7 @@ export default class App extends React.Component {
       return (
         <CameraScreen
           toggleCamera={() => this.toggleCamera()}
-          afterTakingPhoto={(photo) => this.handlePhoto(photo)}
+          afterTakingPhoto={(photo) => this.receivePhoto(photo)}
         />
       );
     }
@@ -97,12 +105,12 @@ export default class App extends React.Component {
         togglePhotoView={() => this.togglePhotoView()}
         itemPhoto={this.state.itemPhoto}
         username={this.state.username}
+        setDesc={(text) => this.receiveDesc(text)}
+        allDone={() => this.sendData()}
         toggleCamera={() => this.toggleCamera()}
       />
     )
   }
-
-
 
   _loadResourcesAsync = async () => {
     return Promise.all([
