@@ -39,14 +39,17 @@ export class CameraScreen extends React.Component {
     })
   }
 
-
-
   onFlipCamera() {
     this.setState({
       type: this.state.type === Camera.Constants.Type.back
         ? Camera.Constants.Type.front
         : Camera.Constants.Type.back,
     });
+  }
+
+  onFacesDetected(face) {
+
+    // console.log(face['faces'][0])
   }
 
   render() {
@@ -67,7 +70,14 @@ export class CameraScreen extends React.Component {
       return (
 
         <View style={Styles.fullScreen}>
-          <Camera ref={(ref) => this.camera = ref} style={Styles.fullScreen} type={this.state.type}>
+          <Camera
+            ref={(ref) => this.camera = ref}
+            style={Styles.fullScreen}
+            type={this.state.type}
+            autoFocus={'on'}
+            faceDetectionMode={'accurate'}
+            onFacesDetected={(face) => this.onFacesDetected(face)}
+          >
 
             <View
               style={Styles.actionBar}>
@@ -109,8 +119,7 @@ export class CameraScreen extends React.Component {
       );
     }
   }
-
-
+  
 }
 
 
