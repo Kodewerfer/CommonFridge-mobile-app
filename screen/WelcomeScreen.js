@@ -45,15 +45,6 @@ export class WelcomeScreen extends Component {
 
   }
 
-  // getSnapshotBeforeUpdate(prevProps, prevState) {
-  //   if (prevState.showTextInput === false) {
-  //     this.playAnimation = true
-  //   } else {
-  //     this.playAnimation = false
-  //   }
-
-  // }
-
   componentDidUpdate(prevProps, prevState) {
 
     if (prevState.showTextInput === true) {
@@ -82,8 +73,6 @@ export class WelcomeScreen extends Component {
         toValue: 1,
       })
     ]).start();
-
-
 
   }
 
