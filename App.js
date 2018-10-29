@@ -18,7 +18,7 @@ export default class App extends React.Component {
       isTakingPhoto: false,
       itemPhoto: null,
       isViewingPhoto: false,
-      itemDesc: null
+      itemDesc: ''
     };
 
   }
@@ -48,7 +48,7 @@ export default class App extends React.Component {
   }
 
   receiveDesc(text) {
-    this.setState({
+    return this.setState({
       itemDesc: text
     })
   }
@@ -59,11 +59,11 @@ export default class App extends React.Component {
     // TODO: configurable URL.
     const URLprefix = 'http://ubishops-community-fridge.herokuapp.com';
     const fridgeID = '1';
-    let actionID = '';
+
 
     // mind the template strings.
     const infoURL = URLprefix + `/fridges/${fridgeID}/items`;
-    const photoURL = URLprefix + `/actions/${actionID}/picture`;
+
 
     // item name, user name 
     let infoRequest = {
@@ -74,54 +74,48 @@ export default class App extends React.Component {
       },
       body: JSON.stringify({
         fridge_id: fridgeID,
-        body: {
-          "user": {
-            "name": "qianwang",
-            "password": "424242"
-          },
-          "item_name": this.state.itemDesc
+        "user": {
+          "name": "qianwang",
+          "password": "424242"
         },
+        "item_name": this.state.itemDesc
+
       }),
     }
 
-    // item's photo
-    let photoRequest = {
-      method: 'PUT',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        action_id: actionID,
-        picture: 'yourOtherValue',
-      }),
+    try {
+      let response = await fetch(infoURL, infoRequest);
+      let responseJson = await response.json();
+      let actionID = await responseJson.action_id;
+
+      const photoURL = await URLprefix + `/actions/${actionID}/picture`;
+      const { base64 } = this.state.itemPhoto;
+
+
+      // item's photo
+      let photoRequest = await {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(base64)
+      }
+
+      let result = await fetch(photoURL, photoRequest);
+
+
+      if (result.ok === 'true' || result.ok) {
+        alert('Add success.')
+      } else {
+        alert('Sending Failed.')
+      }
+
+      return result;
+
+    } catch (error) {
+      console.error(error);
     }
-
-
-
-    return fetch(infoURL, infoRequest)
-      .then((response) => {
-        debugger
-        console.log(response)
-        // return null;
-        // return JSON.stringify(response)
-      })
-      .then((responseJson) => {
-        console.log(responseJson)
-
-        if (!responseJson || !responseJson.action_id || responseJson.action_id === '') {
-          console.error('Action ID is empty');
-          alert('An error has occured, try again later.');
-          return;
-        }
-        return responseJson.action_id;
-      })
-      .then(() => {
-
-      })
-      .catch((error) => {
-        console.error('Error occured during sending' + error);
-      });
 
   }
 

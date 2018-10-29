@@ -18,6 +18,7 @@ export class HomeScreen extends Component {
     super(props);
 
     this.state = {
+      isSendingData: false,
       isKeyboardUp: false,
       itemDesc: ''
     }
@@ -93,9 +94,15 @@ export class HomeScreen extends Component {
     this.setState({
       itemDesc: text
     })
+
+    this.props.setDesc(text);
   }
 
   onSubmiting() {
+
+    if (this.state.isSendingData) {
+      return
+    }
 
     if (!this.props.itemPhoto) {
       alert('Please take a photo of the item');
@@ -107,8 +114,13 @@ export class HomeScreen extends Component {
       return;
     }
 
-    this.props.setDesc(this.state.itemDesc);
-    this.props.allDone();
+    let result = await this.props.allDone();
+    if (result) {
+      this.setState({
+        isSendingData: false
+      })
+    }
+
 
   }
 
