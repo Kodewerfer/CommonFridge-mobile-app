@@ -169,7 +169,7 @@ export default class App extends React.Component {
         itemPhoto={this.state.itemPhoto}
         username={this.state.username}
         setDesc={(text) => this.receiveDesc(text)}
-        allDone={() => this.sendData()}
+        allDone={async () => this.sendData()}
         toggleCamera={() => this.toggleCamera()}
       />
     )

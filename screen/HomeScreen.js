@@ -98,11 +98,15 @@ export class HomeScreen extends Component {
     this.props.setDesc(text);
   }
 
-  onSubmiting() {
+  async onSubmiting() {
 
     if (this.state.isSendingData) {
       return
     }
+
+    this.setState({
+      isSendingData: true
+    })
 
     if (!this.props.itemPhoto) {
       alert('Please take a photo of the item');
@@ -115,11 +119,12 @@ export class HomeScreen extends Component {
     }
 
     let result = await this.props.allDone();
-    if (result) {
+    if (await result) {
       this.setState({
         isSendingData: false
       })
     }
+
 
 
   }
