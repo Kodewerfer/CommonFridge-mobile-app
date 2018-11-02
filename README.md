@@ -1,10 +1,12 @@
 # Bishop's Common Fridge
 
-Create with react native
+Create with react native,
+
 built with Expo
 
 
->Require nodejs
+*Require nodejs*
+
 
 To run the project locally,
 
@@ -23,8 +25,10 @@ To run the project locally,
 Expo published address:
 [https://exp.host/@lijleen/common-fridge]
 
-## To run the project inside Expo, please install Expo Client on your cellphone, then scan the QR code from the page.
-### (Note that: the performance of the app can be severally impacted.)
+#### To run the project inside Expo, please install Expo Client on your cellphone, then scan the QR code from the page.
+
+**(Note that: the performance of the app can be severally impacted.)**
+
 
 
 Build log Address:
