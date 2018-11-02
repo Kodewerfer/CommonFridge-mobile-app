@@ -1,3 +1,13 @@
 node_modules/**/*
 .expo/*
 npm-debug.*
+
+android/**/*
+gradle/**/*
+.gradle/**/*
+build.gradle
+gradlew
+gradlew.*
+settings.gradle
+yarn-error.log
+yarn.lock
