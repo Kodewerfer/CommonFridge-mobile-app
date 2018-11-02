@@ -1,12 +1,6 @@
 # Bishop's Common Fridge
 
-Create with react native,
-
-built with Expo
-
-
-*Require nodejs*
-
+Create with react native, built with Expo.
 
 To run the project locally,
 
