@@ -65,6 +65,10 @@ export class WelcomeScreen extends Component {
       return;
     }
 
+    this.props.navigation.navigate('list', {
+      username: this.state.username
+    });
+
   }
 
   render() {
@@ -95,13 +99,19 @@ export class WelcomeScreen extends Component {
           />
 
           <TouchableOpacity onPress={() => this.onAddingItem()}>
-            <View style={Styles.submitBtn}>
-              <Text style={{ color: '#fff', fontSize: 20 }}>Submit</Text>
+            <View style={[Styles.submitBtn, { backgroundColor: '#2ac12a' }]}>
+              <Text style={Styles.btnText}>New item</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => this.onFetchingItem()}>
+            <View style={[Styles.submitBtn, { backgroundColor: '#54a3ff' }]}>
+              <Text style={Styles.btnText}>Get item</Text>
             </View>
           </TouchableOpacity>
 
         </Animated.View>
-      </Animated.View>
+      </Animated.View >
 
     );
   }
@@ -192,7 +202,7 @@ export class WelcomeScreen extends Component {
 
   getDimensions = () => {
     const windowHeight = Dimensions.get('window').height;
-    const topHeight = windowHeight / 1.8;
+    const topHeight = windowHeight / 1.9;
 
     return {
       windowHeight: windowHeight,
@@ -232,11 +242,15 @@ const Styles = StyleSheet.create({
   },
   submitBtn: {
     borderRadius: 10,
-    paddingLeft: 100,
-    paddingRight: 100,
     paddingTop: 20,
     paddingBottom: 20,
-    backgroundColor: '#2ac12a',
+    marginBottom: 20,
+    width: 300
+  },
+  btnText: {
+    alignSelf: 'center',
+    color: '#fff',
+    fontSize: 20
   },
   text: {
     color: '#fff',

@@ -4,6 +4,7 @@ import { createSwitchNavigator, createStackNavigator } from 'react-navigation';
 import { WelcomeScreen } from '../screen/WelcomeScreen';
 import { HomeScreen } from '../screen/HomeScreen';
 // For fetching
+import { ListScreen } from '../screen/ListScreen';
 
 import { PhotoViewer } from '../modal/PhotoViewer';
 import { CameraScreen } from '../modal/CameraScreen';
@@ -11,6 +12,8 @@ import { CameraScreen } from '../modal/CameraScreen';
 const MainNavigation = createSwitchNavigator({
   welcome: WelcomeScreen,
   home: HomeScreen,
+  list: ListScreen,
+
 }, {
     initialRouteName: 'welcome',
   });
