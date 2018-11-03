@@ -4,30 +4,27 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Camera, Permissions } from 'expo';
 
 export class CameraScreen extends React.Component {
+
   state = {
+    itemPhoto: null,
+    isAbleToSnap: true,
     hasCameraPermission: null,
-    type: Camera.Constants.Type.back,
-    isAbleToSnap: true
+    type: Camera.Constants.Type.back
   };
 
-  async componentWillMount() {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    this.setState({ hasCameraPermission: status === 'granted' });
-  }
-
-  async takeSnap() {
+  async goSnap() {
     if (!this.camera || !this.state.isAbleToSnap) {
       return;
     }
 
     let that = this
 
-    this.camera.takePictureAsync({ quality: 0.3, skipProcessing: true, base64: true }).then(
-      (photo) => {
-        this.props.afterTakingPhoto(photo);
-        this.props.toggleCamera();
-      },
-      () => {
+    this.camera.takePictureAsync({ quality: 0.3, skipProcessing: true, base64: true })
+      .then((photo) => {
+        this.props.navigation.navigate('home', {
+          itemPhoto: photo
+        })
+      }, () => {
         that.setState({
           isAbleToSnap: true
         })
@@ -37,6 +34,7 @@ export class CameraScreen extends React.Component {
     this.setState({
       isAbleToSnap: false
     })
+
   }
 
   onFlipCamera() {
@@ -50,6 +48,11 @@ export class CameraScreen extends React.Component {
   onFacesDetected(face) {
 
     // console.log(face['faces'][0])
+  }
+
+  async componentWillMount() {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    this.setState({ hasCameraPermission: status === 'granted' });
   }
 
   render() {
@@ -84,7 +87,7 @@ export class CameraScreen extends React.Component {
 
               <TouchableOpacity
                 style={Styles.flipBtn}
-                onPress={() => this.props.toggleCamera()}
+                onPress={() => this.props.navigation.navigate('home')}
               >
                 <Text
                   style={Styles.flipBtnText}>
@@ -94,7 +97,7 @@ export class CameraScreen extends React.Component {
 
               <TouchableOpacity
                 style={Styles.snapBtn}
-                onPress={() => this.takeSnap()}
+                onPress={() => this.goSnap()}
                 activeOpacity={snapBtnOpacity}
               >
                 <Text style={[Styles.alertText, isAlertShows]}>Please Hold...</Text>
@@ -119,7 +122,7 @@ export class CameraScreen extends React.Component {
       );
     }
   }
-  
+
 }
 
 

@@ -12,6 +12,9 @@ import {
   TouchableOpacity
 } from 'react-native';
 
+import { withMappedNavigationProps } from 'react-navigation-props-mapper';
+
+@withMappedNavigationProps()
 export class HomeScreen extends Component {
 
   constructor(props) {
@@ -23,6 +26,11 @@ export class HomeScreen extends Component {
       itemDesc: ''
     }
 
+    // storing critical infomation
+    this.username = props.username;
+    this.itemPhoto = props.itemPhoto;
+
+    // animation
     this.topWrapperOpacity = new Animated.Value(1);
     this.keyboardHeight = new Animated.Value(0);
 
@@ -30,72 +38,12 @@ export class HomeScreen extends Component {
     this.bottomWrapperHeight = new Animated.Value(this.getDimensions().btmHeight);
   }
 
-  // Animation preparing
-  componentDidMount() {
-    this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this._keyboardWillShow);
-    this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this._keyboardWillHide);
-
-  }
-
-  renderCenter() {
-    const imgURI = this.props.itemPhoto ? this.props.itemPhoto.uri : '';
-
-    if (imgURI === '') {
-      return (
-        <TouchableOpacity onPress={() => this.props.toggleCamera()}>
-
-          <Text style={Styles.tipsText}> Tap to take a photo</Text>
-          <View style={Styles.iconWrapper}>
-            <Icon name="plus" size={100} color="#fff" />
-          </View>
-
-        </TouchableOpacity>
-      )
-    }
-
-    return (
-      <TouchableOpacity
-        onPress={() => this.props.togglePhotoView()}
-        onLongPress={() => this.props.toggleCamera()}>
-        <Text style={Styles.tipsText}> Tap to view</Text>
-        <Text style={Styles.tipsText}> Hold to take a new one</Text>
-        <Image source={{ uri: imgURI }} style={Styles.imgPort}></Image>
-
-      </TouchableOpacity>
-    )
-  }
-
-  keyboardAccordanceRender() {
-
-
-    if (!this.state.isKeyboardUp) {
-      return (
-        <View style={Styles.topWrapper}>
-
-          <View style={Styles.containerTop}>
-
-            <Text style={[Styles.text, { fontSize: 30 }]}>Welcome!</Text>
-            <Text style={[Styles.text, { fontSize: 30 }]}>{this.props.username}</Text>
-
-          </View>
-
-          <View style={Styles.containerMid}>
-            {this.renderCenter()}
-          </View>
-
-        </View>
-      );
-    }
-
-
-  }
-
   onChangeText(text) {
     this.setState({
       itemDesc: text
     })
 
-    this.props.setDesc(text);
+    // this.props.setDesc(text);
   }
 
   async onSubmiting() {
@@ -118,15 +66,128 @@ export class HomeScreen extends Component {
       return;
     }
 
-    let result = await this.props.allDone();
+    let result = await this.sendData();
     if (await result) {
       this.setState({
         isSendingData: false
       })
     }
 
+  }
+
+  // Send data to server.
+  async sendData() {
+
+    // TODO: configurable URL.
+    const URLprefix = 'http://ubishops-community-fridge.herokuapp.com';
+    const fridgeID = '1';
 
 
+    // mind the template strings.
+    const infoURL = URLprefix + `/fridges/${fridgeID}/items`;
+
+
+    // item name, user name 
+    let infoRequest = {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        fridge_id: fridgeID,
+        "user": {
+          "name": "qianwang",
+          "password": "424242"
+        },
+        "item_name": this.state.itemDesc
+
+      }),
+    }
+
+
+    // first request, send item name.
+    // get action ID.
+    let response, responseJson, actionID;
+    try {
+
+      response = await fetch(infoURL, infoRequest);
+      responseJson = await response.json();
+      actionID = await responseJson.action_id;
+
+    } catch (e) {
+      debugger
+      alert("Sending failed, server return with invalid response.")
+      return;
+    }
+
+    // second requrest, send item photo
+    // using action ID
+    try {
+
+      const photoURL = await URLprefix + `/actions/${actionID}/picture`;
+      const { base64 } = this.state.itemPhoto;
+
+
+      // item's photo
+      let photoRequest = await {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(base64)
+      }
+
+      let result = await fetch(photoURL, photoRequest);
+
+
+      if (result.ok === 'true' || result.ok) {
+        alert('success.')
+      } else {
+        alert('Sending Failed. Server did not register the item.')
+      }
+
+      return result;
+
+    } catch (error) {
+      alert('Image sending failed.')
+      // console.error(error);
+    }
+
+  }
+
+  renderImageArea() {
+    const imgURI = this.props.itemPhoto ? this.props.itemPhoto.uri : '';
+
+    if (imgURI === '') {
+      return (
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate('camera')}
+        >
+
+          <Text style={Styles.tipsText}> Tap to take a photo</Text>
+          <View style={Styles.iconWrapper}>
+            <Icon name="plus" size={100} color="#fff" />
+          </View>
+
+        </TouchableOpacity>
+      )
+    }
+
+    return (
+      <TouchableOpacity
+        onPress={() => this.props.navigation.navigate('photoview', {
+          itemPhoto: this.props.itemPhoto
+        })}
+        onLongPress={() => this.props.navigation.navigate('camera')}>
+
+        <Text style={Styles.tipsText}> Tap to view</Text>
+        <Text style={Styles.tipsText}> Hold to take a new one</Text>
+        <Image source={{ uri: imgURI }} style={Styles.imgPort}></Image>
+
+      </TouchableOpacity>
+    )
   }
 
   render() {
@@ -143,12 +204,12 @@ export class HomeScreen extends Component {
             <View style={Styles.containerTop}>
 
               <Text style={[Styles.text, Styles.welcomeText, { fontSize: 30 }]}>Welcome!</Text>
-              <Text style={[Styles.text, Styles.welcomeText, { fontSize: 35 }, { fontFamily: 'space-mono' }]}>{this.props.username}</Text>
+              <Text style={[Styles.text, Styles.welcomeText, { fontSize: 35 }, { fontFamily: 'space-mono' }]}>{this.username}</Text>
 
             </View>
 
             <View style={Styles.containerMid}>
-              {this.renderCenter()}
+              {this.renderImageArea()}
             </View>
 
           </Animated.View>
@@ -160,6 +221,7 @@ export class HomeScreen extends Component {
               <TextInput
                 style={Styles.textbox}
                 textContentType={'givenName'}
+                placeholder={this.state.itemDesc}
                 onChangeText={(text) => this.onChangeText(text)}
               />
 
@@ -177,6 +239,14 @@ export class HomeScreen extends Component {
     );
   }
 
+  // Animation preparing
+  componentDidMount() {
+    this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this._keyboardWillShow);
+    this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this._keyboardWillHide);
+
+  }
+
+  // === Animation ===
   _keyboardWillShow = (event) => {
 
     Animated.parallel([

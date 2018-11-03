@@ -1,11 +1,7 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
-import { WelcomeScreen } from './screen/WelcomeScreen';
-import { CameraScreen } from './screen/CameraScreen';
-import { HomeScreen } from './screen/HomeScreen';
-import { PhotoViewer } from './stateless/PhotoViewer';
 
+import RootNavigation from './navigation/Navigations'
 
 export default class App extends React.Component {
 
@@ -21,36 +17,6 @@ export default class App extends React.Component {
       itemDesc: ''
     };
 
-  }
-
-  receiveUsername(username) {
-    this.setState({
-      username: username
-    })
-  }
-
-  toggleCamera() {
-    this.setState({
-      isTakingPhoto: !this.state.isTakingPhoto
-    })
-  }
-
-  togglePhotoView() {
-    this.setState({
-      isViewingPhoto: !this.state.isViewingPhoto
-    })
-  }
-
-  receivePhoto(photo) {
-    this.setState({
-      itemPhoto: photo
-    })
-  }
-
-  receiveDesc(text) {
-    return this.setState({
-      itemDesc: text
-    })
   }
 
   // Send data to server.
@@ -83,10 +49,22 @@ export default class App extends React.Component {
       }),
     }
 
+
+    let response, responseJson, actionID;
     try {
-      let response = await fetch(infoURL, infoRequest);
-      let responseJson = await response.json();
-      let actionID = await responseJson.action_id;
+
+      response = await fetch(infoURL, infoRequest);
+      responseJson = await response.json();
+      actionID = await responseJson.action_id;
+
+    } catch (e) {
+      debugger
+      alert("Sending failed, server return with invalid response.")
+      return;
+    }
+
+
+    try {
 
       const photoURL = await URLprefix + `/actions/${actionID}/picture`;
       const { base64 } = this.state.itemPhoto;
@@ -106,20 +84,21 @@ export default class App extends React.Component {
 
 
       if (result.ok === 'true' || result.ok) {
-        alert('Add success.')
+        alert('success.')
       } else {
-        alert('Sending Failed.')
+        alert('Sending Failed. Server did not register the item.')
       }
 
       return result;
 
     } catch (error) {
-      console.error(error);
+      alert('Image sending failed.')
+      // console.error(error);
     }
 
   }
 
-  render() {
+  renderOLD() {
 
     // loading resouces process, unused for now.
     const state = this.state;
@@ -168,11 +147,29 @@ export default class App extends React.Component {
         togglePhotoView={() => this.togglePhotoView()}
         itemPhoto={this.state.itemPhoto}
         username={this.state.username}
+        itemDesc={this.state.itemDesc}
         setDesc={(text) => this.receiveDesc(text)}
         allDone={async () => this.sendData()}
         toggleCamera={() => this.toggleCamera()}
       />
     )
+  }
+
+  render() {
+
+    // loading resouces process, unused for now.
+    const state = this.state;
+    if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
+      return (
+        <AppLoading
+          startAsync={this._loadResourcesAsync}
+          onError={this._handleLoadingError}
+          onFinish={this._handleFinishLoading}
+        />
+      );
+    }
+
+    return (<RootNavigation />)
   }
 
   _loadResourcesAsync = async () => {
@@ -197,11 +194,5 @@ export default class App extends React.Component {
   _handleFinishLoading = () => {
     this.setState({ isLoadingComplete: true });
   };
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-});
+}

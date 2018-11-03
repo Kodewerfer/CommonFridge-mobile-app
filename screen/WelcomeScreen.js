@@ -32,6 +32,80 @@ export class WelcomeScreen extends Component {
 
   }
 
+  onChangeText(text) {
+    this.setState({
+      username: text
+    })
+  }
+
+  validateInfo() {
+    if (this.state.username === '') {
+      alert('Please give us a user name.')
+      return false;
+    }
+    return true;
+  }
+
+  // adding a new item
+  onAddingItem() {
+    if (!this.validateInfo()) {
+      return;
+    }
+    // this.props.whenSubmit(this.state.username)
+
+    this.props.navigation.navigate('home', {
+      username: this.state.username
+    });
+  }
+
+  // on fetching an item.
+  onFetchingItem() {
+
+    if (!this.validateInfo()) {
+      return;
+    }
+
+  }
+
+  render() {
+
+    const titleText = "Bishop’s Community Fridge";
+    const secondLine = "Welcome!";
+    const inputTop = "You shall be known as";
+
+
+
+    return (
+
+      <Animated.View style={[Styles.container, { paddingBottom: this.keyboardHeight }]}>
+
+        <Animated.View style={[Styles.welcomeTexts, { height: this.welcomeTextHeight }, { opacity: this.welcomeTextOpacity }]}>
+          <Text style={Styles.text}>{titleText}</Text>
+          <Text style={[Styles.text, { fontSize: 30 }, { padding: 30 }]}>{secondLine}</Text>
+        </Animated.View>
+
+        <Animated.View style={[Styles.textInput, { height: this.textInputHeight }, { opacity: this.textInputOpactiy }]}>
+
+          <Text style={[Styles.text, { fontFamily: 'space-mono' }]}>{inputTop}</Text>
+
+          <TextInput
+            style={Styles.textbox}
+            textContentType={'givenName'}
+            onChangeText={(text) => this.onChangeText(text)}
+          />
+
+          <TouchableOpacity onPress={() => this.onAddingItem()}>
+            <View style={Styles.submitBtn}>
+              <Text style={{ color: '#fff', fontSize: 20 }}>Submit</Text>
+            </View>
+          </TouchableOpacity>
+
+        </Animated.View>
+      </Animated.View>
+
+    );
+  }
+
   // Animation preparing
   componentDidMount() {
     this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this._keyboardWillShow);
@@ -45,6 +119,7 @@ export class WelcomeScreen extends Component {
 
   }
 
+  // === Animation ===
   componentDidUpdate(prevProps, prevState) {
 
     if (prevState.showTextInput === true) {
@@ -74,59 +149,6 @@ export class WelcomeScreen extends Component {
       })
     ]).start();
 
-  }
-
-  handleInput(text) {
-    this.setState({
-      username: text
-    })
-  }
-
-  onSubmit() {
-    if (this.state.username === '') {
-      alert('Please give us a user name.')
-      return;
-    }
-    this.props.whenSubmit(this.state.username)
-  }
-
-  render() {
-
-    const titleText = "Bishop’s Community Fridge";
-    const secondLine = "Welcome!";
-    const inputTop = "You shall be known as";
-
-
-
-    return (
-
-      <Animated.View style={[Styles.container, { paddingBottom: this.keyboardHeight }]}>
-
-        <Animated.View style={[Styles.welcomeTexts, { height: this.welcomeTextHeight }, { opacity: this.welcomeTextOpacity }]}>
-          <Text style={Styles.text}>{titleText}</Text>
-          <Text style={[Styles.text, { fontSize: 30 }, { padding: 30 }]}>{secondLine}</Text>
-        </Animated.View>
-
-        <Animated.View style={[Styles.textInput, { height: this.textInputHeight }, { opacity: this.textInputOpactiy }]}>
-
-          <Text style={[Styles.text, { fontFamily: 'space-mono' }]}>{inputTop}</Text>
-
-          <TextInput
-            style={Styles.textbox}
-            textContentType={'givenName'}
-            onChangeText={(text) => this.handleInput(text)}
-          />
-
-          <TouchableOpacity onPress={() => this.onSubmit()}>
-            <View style={Styles.submitBtn}>
-              <Text style={{ color: '#fff', fontSize: 20 }}>Submit</Text>
-            </View>
-          </TouchableOpacity>
-
-        </Animated.View>
-      </Animated.View>
-
-    );
   }
 
   _keyboardWillShow = (event) => {

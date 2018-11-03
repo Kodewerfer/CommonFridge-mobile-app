@@ -11,3 +11,5 @@ gradlew.*
 settings.gradle
 yarn-error.log
 yarn.lock
+
+tsconfig.json
