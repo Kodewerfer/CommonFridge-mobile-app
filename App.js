@@ -10,11 +10,6 @@ export default class App extends React.Component {
 
     this.state = {
       isLoadingComplete: false,
-      username: '',
-      isTakingPhoto: false,
-      itemPhoto: null,
-      isViewingPhoto: false,
-      itemDesc: ''
     };
 
   }
