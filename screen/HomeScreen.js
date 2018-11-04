@@ -26,7 +26,7 @@ export class HomeScreen extends Component {
       itemDesc: ''
     }
 
-    // storing critical infomation
+    // storing critical information
     this.username = props.username;
     this.itemPhoto = props.itemPhoto;
 
@@ -46,7 +46,7 @@ export class HomeScreen extends Component {
     // this.props.setDesc(text);
   }
 
-  async onSubmiting() {
+  async onSubmitting() {
 
     if (this.state.isSendingData) {
       return
@@ -79,12 +79,12 @@ export class HomeScreen extends Component {
   async sendData() {
 
     // TODO: configurable URL.
-    const URLprefix = 'http://ubishops-community-fridge.herokuapp.com';
+    const urlPrefix = 'http://ubishops-community-fridge.herokuapp.com';
     const fridgeID = '1';
 
 
     // mind the template strings.
-    const infoURL = URLprefix + `/fridges/${fridgeID}/items`;
+    const infoURL = urlPrefix + `/fridges/${fridgeID}/items`;
 
 
     // item name, user name 
@@ -109,6 +109,7 @@ export class HomeScreen extends Component {
     // first request, send item name.
     // get action ID.
     let response, responseJson, actionID;
+
     try {
 
       response = await fetch(infoURL, infoRequest);
@@ -121,16 +122,16 @@ export class HomeScreen extends Component {
       return;
     }
 
-    // second requrest, send item photo
+    // second request, send item photo
     // using action ID
     try {
 
-      const photoURL = await URLprefix + `/actions/${actionID}/picture`;
-      const { base64 } = this.state.itemPhoto;
+      const photoURL = await urlPrefix + `/actions/${actionID}/picture`;
+      const { base64 } = this.props.itemPhoto;
 
 
       // item's photo
-      let photoRequest = await {
+      let photoRequest = {
         method: 'PUT',
         headers: {
           Accept: 'application/json',
@@ -225,9 +226,15 @@ export class HomeScreen extends Component {
                 onChangeText={(text) => this.onChangeText(text)}
               />
 
-              <TouchableOpacity onPress={() => this.onSubmiting()}>
+              <TouchableOpacity onPress={() => this.onSubmitting()}>
                 <View style={Styles.submitBtn}>
-                  <Text style={{ color: '#fff', fontSize: 20 }}>Done</Text>
+                  <Text style={{ color: '#fff', fontSize: 20, alignSelf: 'center', }}>Done</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                <View style={Styles.cancelBtn}>
+                  <Text style={Styles.cancelBtnText}>Cancel</Text>
                 </View>
               </TouchableOpacity>
 
@@ -362,8 +369,8 @@ const Styles = StyleSheet.create({
   },
   submitBtn: {
     borderRadius: 10,
-    paddingLeft: 100,
-    paddingRight: 100,
+    width: 230,
+    alignContent: 'center',
     paddingTop: 20,
     paddingBottom: 20,
     backgroundColor: '#2ac12a',
@@ -385,6 +392,20 @@ const Styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
+  },
+  cancelBtn: {
+    marginTop: 7,
+    borderRadius: 10,
+    width: 230,
+    alignContent: 'center',
+    paddingTop: 20,
+    paddingBottom: 20,
+    backgroundColor: 'red'
+  },
+  cancelBtnText: {
+    alignSelf: 'center',
+    fontSize: 20,
+    color: '#fff'
   },
   invis: {
     display: "none"
