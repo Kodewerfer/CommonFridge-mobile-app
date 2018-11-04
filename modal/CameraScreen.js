@@ -45,6 +45,15 @@ export class CameraScreen extends React.Component {
     });
   }
 
+  onCancel() {
+
+    if (ableToSnap) {
+      return
+    }
+    this.props.navigation.navigate('home')
+
+  }
+
   onFacesDetected(face) {
 
     // console.log(face['faces'][0])
@@ -87,7 +96,7 @@ export class CameraScreen extends React.Component {
 
               <TouchableOpacity
                 style={Styles.flipBtn}
-                onPress={() => this.props.navigation.navigate('home')}
+                onPress={() => this.onCancel()}
               >
                 <Text
                   style={Styles.flipBtnText}>
