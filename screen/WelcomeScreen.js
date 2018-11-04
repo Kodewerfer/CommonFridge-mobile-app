@@ -106,7 +106,7 @@ export class WelcomeScreen extends Component {
 
           <TouchableOpacity onPress={() => this.onFetchingItem()}>
             <View style={[Styles.submitBtn, { backgroundColor: '#54a3ff' }]}>
-              <Text style={Styles.btnText}>Get item</Text>
+              <Text style={Styles.btnText}>Take item</Text>
             </View>
           </TouchableOpacity>
 

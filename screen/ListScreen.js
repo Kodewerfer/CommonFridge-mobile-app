@@ -181,7 +181,7 @@ export class ListScreen extends Component {
               <View key={rowData.id} style={Styles.itemsContainer}>
                 <TouchableHighlight onPress={() => this.deleteItem(rowData)} >
                   <View style={Styles.getBtn}>
-                    <Text style={Styles.getBtnText}>Get</Text>
+                    <Text style={Styles.getBtnText}>Take</Text>
                   </View>
                 </TouchableHighlight>
               </View>
@@ -264,14 +264,13 @@ const Styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     width: 85,
-    backgroundColor: 'red'
+    backgroundColor: '#54a3ff'
   },
   getBtnText: {
     fontWeight: '800',
     fontSize: 20,
     color: '#fff'
   },
-
   rowBack: {
     alignItems: 'center',
     // backgroundColor: '#DDD',
@@ -279,6 +278,7 @@ const Styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingLeft: 15,
+    borderBottomWidth: 1,
   },
   cancelWrapper: {
     paddingTop: 20,
@@ -287,14 +287,15 @@ const Styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   cancelBtn: {
-    borderRadius: 10,
-    paddingLeft: 100,
-    paddingRight: 100,
+    width:230,
+    alignContent: 'center',
+    borderRadius: 10,   
     paddingTop: 20,
     paddingBottom: 20,
     backgroundColor: 'red'
   },
   cancelBtnText: {
+    alignSelf: 'center',
     fontSize: 20,
     color: '#fff'
   },
