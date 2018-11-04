@@ -30,8 +30,9 @@ Build log:
 [https://expo.io/builds/f75c9ca1-ba1c-4900-af1c-db9a51911ccd]
 
 
-## Run project inside the Expo
+## The easy way
 
+#### The quickest way to run the project would be to run it inside Expo client on your cellphone,
 #### To run the project inside Expo, please install Expo Client on your cellphone, then scan the QR code from the published address.
 
 **(Note that: the performance of the app can be severally impacted.)**
