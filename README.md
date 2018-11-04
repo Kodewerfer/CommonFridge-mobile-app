@@ -15,7 +15,9 @@ Created with react native, built with Expo.
 
 `expo start`
 
->Note: Need to have Expo Client installed on the phone.
+3. To build the project using expo.
+   
+`expo build:android` or `expo build:ios`
 
 
 ## Expo 
@@ -25,7 +27,8 @@ Expo published address:
 
 
 Build log:
-[https://expo.io/builds/6d7839b8-5792-4604-b8dc-1f2246b4ff47]
+[https://expo.io/builds/f75c9ca1-ba1c-4900-af1c-db9a51911ccd]
+
 
 ## Run project inside the Expo
 
