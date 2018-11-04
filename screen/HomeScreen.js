@@ -49,6 +49,7 @@ export class HomeScreen extends Component {
   async onSubmitting() {
 
     if (this.state.isSendingData) {
+      alert('sending data, please wait.')
       return
     }
 
