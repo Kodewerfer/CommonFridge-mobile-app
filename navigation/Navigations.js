@@ -1,4 +1,4 @@
-import { createSwitchNavigator, createStackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 
 // For adding
 import { WelcomeScreen } from '../screen/WelcomeScreen';
@@ -9,13 +9,14 @@ import { ListScreen } from '../screen/ListScreen';
 import { PhotoViewer } from '../modal/PhotoViewer';
 import { CameraScreen } from '../modal/CameraScreen';
 
-const MainNavigation = createSwitchNavigator({
+const MainNavigation = createStackNavigator({
   welcome: WelcomeScreen,
   home: HomeScreen,
   list: ListScreen,
 
 }, {
     initialRouteName: 'welcome',
+    headerMode: 'none'
   });
 
 const RootNavigation = createStackNavigator({

@@ -12,4 +12,6 @@ settings.gradle
 yarn-error.log
 yarn.lock
 
+.vscode/**/*
+
 tsconfig.json
