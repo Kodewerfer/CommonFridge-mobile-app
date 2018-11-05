@@ -101,7 +101,7 @@ export class HomeScreen extends Component {
       body: JSON.stringify({
         fridge_id: fridgeID,
         "user": {
-          "name": "qianwang",
+          "name": this.props.username,
           "password": "424242"
         },
         "item_name": this.state.itemDesc

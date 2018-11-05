@@ -90,7 +90,7 @@ export class ListScreen extends Component {
           body: JSON.stringify({
             'item_id': id,
             "user": {
-              "name": "qianwang",
+              "name": this.props.username,
               "password": "424242"
             }
           })
