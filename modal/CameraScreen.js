@@ -47,7 +47,7 @@ export class CameraScreen extends React.Component {
 
   onCancel() {
 
-    if (ableToSnap) {
+    if (!this.state.isAbleToSnap) {
       return
     }
     this.props.navigation.navigate('home')
