@@ -11,6 +11,10 @@ import {
 } from 'react-native';
 
 export class WelcomeScreen extends Component {
+  static navigationOptions = {
+    header: null
+  };
+
   constructor(props) {
     super(props);
 

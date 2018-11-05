@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { AppLoading } from 'expo';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import {
   StyleSheet,
   Text,
@@ -13,6 +12,10 @@ import { withMappedNavigationProps } from 'react-navigation-props-mapper';
 
 @withMappedNavigationProps()
 export class ListScreen extends Component {
+  static navigationOptions = {
+    title: 'Take Item',    
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -154,7 +157,7 @@ export class ListScreen extends Component {
 
         <View style={Styles.textWrapper}>
           <Text style={[Styles.text, { fontSize: 30 }, { marginBottom: 10, }]}>Welcome, {this.props.username}</Text>
-          <Text style={[Styles.text, { fontSize: 15, fontStyle: 'italic', fontWeight: '700' }]}>swipe right on the item to get it.</Text>
+          <Text style={[Styles.text, { fontSize: 15, fontStyle: 'italic', fontWeight: '700' }]}>swipe right on the item to take it.</Text>
         </View>
 
         <View
@@ -165,7 +168,7 @@ export class ListScreen extends Component {
 
           <SwipeListView
             useFlatList={true}
-            data={this.state.itemList.slice()}
+            data={this.state.itemList ? this.state.itemList.slice() : null}
 
             keyExtractor={(rowData, index) => {
               return rowData.id.toString();
@@ -191,14 +194,6 @@ export class ListScreen extends Component {
             disableLeftSwipe={true}
           />
 
-        </View>
-
-        <View style={Styles.cancelWrapper}>
-          <TouchableHighlight onPress={() => this.props.navigation.goBack()} >
-            <View style={Styles.cancelBtn}>
-              <Text style={Styles.cancelBtnText}>Cancel</Text>
-            </View>
-          </TouchableHighlight>
         </View>
 
       </View >
@@ -229,7 +224,7 @@ const Styles = StyleSheet.create({
   },
   textWrapper: {
     padding: 10,
-    flex: 0.3,
+    flex: 0.2,
     alignItems: 'center',
     justifyContent: 'flex-end',
   },
@@ -279,25 +274,6 @@ const Styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingLeft: 15,
     borderBottomWidth: 1,
-  },
-  cancelWrapper: {
-    paddingTop: 20,
-    flex: 0.2,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
-  cancelBtn: {
-    width:230,
-    alignContent: 'center',
-    borderRadius: 10,   
-    paddingTop: 20,
-    paddingBottom: 20,
-    backgroundColor: 'red'
-  },
-  cancelBtnText: {
-    alignSelf: 'center',
-    fontSize: 20,
-    color: '#fff'
   },
   invis: {
     display: "none"

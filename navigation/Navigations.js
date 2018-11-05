@@ -16,7 +16,6 @@ const MainNavigation = createStackNavigator({
 
 }, {
     initialRouteName: 'welcome',
-    headerMode: 'none'
   });
 
 const RootNavigation = createStackNavigator({

@@ -16,6 +16,9 @@ import { withMappedNavigationProps } from 'react-navigation-props-mapper';
 
 @withMappedNavigationProps()
 export class HomeScreen extends Component {
+  static navigationOptions = {
+    title: 'Add item',
+  };
 
   constructor(props) {
     super(props);
@@ -203,13 +206,6 @@ export class HomeScreen extends Component {
 
           <Animated.View style={[Styles.topWrapper, { height: this.topWrapperHeight }, { opacity: this.topWrapperOpacity }]}>
 
-            <View style={Styles.containerTop}>
-
-              <Text style={[Styles.text, Styles.welcomeText, { fontSize: 30 }]}>Welcome!</Text>
-              <Text style={[Styles.text, Styles.welcomeText, { fontSize: 35 }, { fontFamily: 'space-mono' }]}>{this.username}</Text>
-
-            </View>
-
             <View style={Styles.containerMid}>
               {this.renderImageArea()}
             </View>
@@ -230,12 +226,6 @@ export class HomeScreen extends Component {
               <TouchableOpacity onPress={() => this.onSubmitting()}>
                 <View style={Styles.submitBtn}>
                   <Text style={{ color: '#fff', fontSize: 20, alignSelf: 'center', }}>Done</Text>
-                </View>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                <View style={Styles.cancelBtn}>
-                  <Text style={Styles.cancelBtnText}>Cancel</Text>
                 </View>
               </TouchableOpacity>
 
@@ -297,7 +287,7 @@ export class HomeScreen extends Component {
 
   getDimensions = () => {
     const windowHeight = Dimensions.get('window').height;
-    const topHeight = windowHeight / 1.6;
+    const topHeight = windowHeight / 2;
 
     return {
       windowHeight: windowHeight,
@@ -334,10 +324,8 @@ const Styles = StyleSheet.create({
     backgroundColor: '#ededed',
   },
   topWrapper: {
-    height: "65%",
   },
   bottomWrapper: {
-    height: "35%"
   },
   imgPort: {
     borderRadius: 15,
@@ -376,14 +364,6 @@ const Styles = StyleSheet.create({
     paddingBottom: 20,
     backgroundColor: '#2ac12a',
   },
-  containerTop: {
-    flex: 0.6,
-    borderTopStartRadius: 25,
-    borderTopEndRadius: 25,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    backgroundColor: "#7650aa"
-  },
   containerMid: {
     flex: 1.5,
     alignItems: 'center',
@@ -393,20 +373,6 @@ const Styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-  },
-  cancelBtn: {
-    marginTop: 7,
-    borderRadius: 10,
-    width: 230,
-    alignContent: 'center',
-    paddingTop: 20,
-    paddingBottom: 20,
-    backgroundColor: 'red'
-  },
-  cancelBtnText: {
-    alignSelf: 'center',
-    fontSize: 20,
-    color: '#fff'
   },
   invis: {
     display: "none"
