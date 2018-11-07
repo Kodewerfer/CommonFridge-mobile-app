@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {
-  Dimensions,
   Keyboard,
   Animated,
   StyleSheet,
@@ -12,7 +11,12 @@ import {
   TouchableOpacity
 } from 'react-native';
 
+// react navigation
 import { withMappedNavigationProps } from 'react-navigation-props-mapper';
+import { Header } from 'react-navigation'
+
+// helpers
+import { DimensionHelper } from '../helpers/dimension';
 
 @withMappedNavigationProps()
 export class HomeScreen extends Component {
@@ -23,22 +27,18 @@ export class HomeScreen extends Component {
   constructor(props) {
     super(props);
 
+
     this.state = {
       isSendingData: false,
       isKeyboardUp: false,
       itemDesc: ''
     }
 
+
     // storing critical information
     this.username = props.username;
     this.itemPhoto = props.itemPhoto;
 
-    // animation
-    this.topWrapperOpacity = new Animated.Value(1);
-    this.keyboardHeight = new Animated.Value(0);
-
-    this.topWrapperHeight = new Animated.Value(this.getDimensions().topHeight);
-    this.bottomWrapperHeight = new Animated.Value(this.getDimensions().btmHeight);
   }
 
   onChangeText(text) {
@@ -195,6 +195,26 @@ export class HomeScreen extends Component {
     )
   }
 
+  // Animation preparing
+  prepareAnimation() {
+    this.getDimensions = new DimensionHelper({ 'header': Header }).getDimensions();
+    // animation
+    this.topWrapperOpacity = new Animated.Value(1);
+    this.keyboardHeight = new Animated.Value(0);
+
+    this.topWrapperHeight = new Animated.Value(this.getDimensions().topHeight);
+    this.bottomWrapperHeight = new Animated.Value(this.getDimensions().btmHeight);
+
+    this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this._keyboardWillShow);
+    this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this._keyboardWillHide);
+  }
+
+  componentWillMount = () => {
+
+    this.prepareAnimation();
+
+  };
+
   render() {
 
     const inputTop = "It's / They're ..."
@@ -237,13 +257,6 @@ export class HomeScreen extends Component {
     );
   }
 
-  // Animation preparing
-  componentDidMount() {
-    this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this._keyboardWillShow);
-    this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this._keyboardWillHide);
-
-  }
-
   // === Animation ===
   _keyboardWillShow = (event) => {
 
@@ -283,17 +296,6 @@ export class HomeScreen extends Component {
 
     ]).start();
 
-  }
-
-  getDimensions = () => {
-    const windowHeight = Dimensions.get('window').height;
-    const topHeight = windowHeight / 2;
-
-    return {
-      windowHeight: windowHeight,
-      topHeight: topHeight,
-      btmHeight: windowHeight - topHeight
-    }
   }
 }
 

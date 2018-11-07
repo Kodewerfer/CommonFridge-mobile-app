@@ -7,6 +7,7 @@ import {
   TouchableHighlight
 } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
+// react navigation
 import { withMappedNavigationProps } from 'react-navigation-props-mapper';
 
 

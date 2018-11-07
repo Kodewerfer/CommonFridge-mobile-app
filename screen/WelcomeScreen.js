@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-  Dimensions,
   Keyboard,
   Animated,
   StyleSheet,
@@ -9,6 +8,9 @@ import {
   TextInput,
   TouchableOpacity
 } from 'react-native';
+
+// helpers
+import { DimensionHelper } from '../helpers/dimension';
 
 export class WelcomeScreen extends Component {
   static navigationOptions = {
@@ -23,17 +25,6 @@ export class WelcomeScreen extends Component {
       username: '',
       isNameEmpty: true
     }
-
-    this.welcomeTextOpacity = new Animated.Value(1);
-    this.textInputOpactiy = new Animated.Value(0);
-
-    this.keyboardHeight = new Animated.Value(0);
-
-    // this.welcomeTextHeight = new Animated.Value(this.getDimensions().topHeight);
-    this.welcomeTextHeight = new Animated.Value(this.getDimensions().windowHeight);
-    // this.textInputHeight = new Animated.Value(this.getDimensions().btmHeight);
-    this.textInputHeight = new Animated.Value(0);
-
   }
 
   onChangeText(text) {
@@ -75,7 +66,30 @@ export class WelcomeScreen extends Component {
 
   }
 
+  prepareAnimation() {
+
+    this.getDimensions = new DimensionHelper().getDimensions();
+
+    this.welcomeTextOpacity = new Animated.Value(1);
+    this.textInputOpactiy = new Animated.Value(0);
+
+    this.keyboardHeight = new Animated.Value(0);
+
+    // this.welcomeTextHeight = new Animated.Value(this.getDimensions().topHeight);
+    this.welcomeTextHeight = new Animated.Value(this.getDimensions().windowHeight);
+    // this.textInputHeight = new Animated.Value(this.getDimensions().btmHeight);
+    this.textInputHeight = new Animated.Value(0);
+
+  }
+
+  componentWillMount = () => {
+    this.prepareAnimation();
+  };
+
+
   render() {
+
+
 
     const titleText = "Bishop’s Community Fridge";
     const secondLine = "Welcome!";
@@ -121,7 +135,7 @@ export class WelcomeScreen extends Component {
   }
 
   // Animation preparing
-  componentDidMount() {
+  componentDidMount = () => {
     this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this._keyboardWillShow);
     this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this._keyboardWillHide);
 
@@ -182,7 +196,7 @@ export class WelcomeScreen extends Component {
       }),
 
     ]).start();
-  }
+  };
 
   _keyboardWillHide = (event) => {
 
@@ -202,18 +216,7 @@ export class WelcomeScreen extends Component {
 
     ]).start();
 
-  }
-
-  getDimensions = () => {
-    const windowHeight = Dimensions.get('window').height;
-    const topHeight = windowHeight / 1.9;
-
-    return {
-      windowHeight: windowHeight,
-      topHeight: topHeight,
-      btmHeight: windowHeight - topHeight
-    }
-  }
+  };
 }
 
 const Styles = StyleSheet.create({
